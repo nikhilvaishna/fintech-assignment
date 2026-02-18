@@ -7,25 +7,28 @@
 1. Go to [railway.app](https://railway.app) and sign up/login with GitHub
 2. Click **"New Project"** → **"Deploy from GitHub repo"**
 3. Select your `fintech-assignment` repository
-4. Railway will auto-detect it's a Node.js project
-5. Click on the service → **"Variables"** tab → Add these:
+4. **IMPORTANT**: Click on the service → Go to **"Settings"** → Set **"Root Directory"** to `backend`
+5. Railway will auto-detect it's a Node.js project
+6. Go to **"Variables"** tab → Add these:
    ```
    PORT=3001
    JWT_ACCESS_SECRET=your-production-access-secret-change-this
    JWT_REFRESH_SECRET=your-production-refresh-secret-change-this
    FRONTEND_URL=https://your-frontend-url.vercel.app
    ```
-6. Railway will auto-deploy. **Copy the public URL** (e.g., `https://your-app.up.railway.app`)
+   (You'll update FRONTEND_URL after deploying frontend)
+7. Railway will auto-deploy. **Copy the public URL** (e.g., `https://your-app.up.railway.app`)
 
 ### Step 2: Deploy Frontend to Vercel
 
 1. Go to [vercel.com](https://vercel.com) and sign up/login with GitHub
 2. Click **"Add New Project"** → Import your `fintech-assignment` repository
-3. Set **Root Directory** to `frontend`
+3. **IMPORTANT**: Set **"Root Directory"** to `frontend`
 4. In **Environment Variables**, add:
    ```
    NEXT_PUBLIC_API_URL=https://your-backend-url.up.railway.app
    ```
+   (Use the Railway URL from Step 1)
 5. Click **"Deploy"**
 6. Vercel will give you a URL like `https://your-app.vercel.app`
 
@@ -44,6 +47,19 @@ Visit your Vercel URL and test the app!
 
 ---
 
+## Troubleshooting Railway Build
+
+If you get "Error creating build plan with Nixpacks":
+
+1. **Make sure Root Directory is set**: Railway → Service → Settings → Root Directory = `backend`
+2. **Check build logs**: Railway → Deployments → Click on failed deployment → View logs
+3. **Manual build command** (if needed): In Railway Settings → Deploy → Custom start command:
+   ```
+   npm install && npm run build && npm run db:generate && npm run db:push && npm start
+   ```
+
+---
+
 ## Alternative: Render.com (Both Services)
 
 ### Backend on Render:
@@ -52,7 +68,7 @@ Visit your Vercel URL and test the app!
 2. **New** → **Web Service** → Connect GitHub repo
 3. Settings:
    - **Root Directory**: `backend`
-   - **Build Command**: `npm install && npm run db:generate && npm run db:push`
+   - **Build Command**: `npm install && npm run build && npm run db:generate && npm run db:push`
    - **Start Command**: `npm start`
 4. Add Environment Variables:
    ```
