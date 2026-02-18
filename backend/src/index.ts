@@ -7,9 +7,29 @@ import taskRoutes from "./routes/tasks.js";
 const app = express();
 const PORT = process.env.PORT ?? 3001;
 
+const rawAllowed =
+  process.env.ALLOWED_ORIGINS ??
+  process.env.FRONTEND_URL ??
+  "http://localhost:3000";
+
+const allowedOrigins = rawAllowed
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean)
+  .map((s) => s.replace(/\/+$/, ""));
+
+const allowVercelPreviews = (process.env.ALLOW_VERCEL_PREVIEWS ?? "false") === "true";
+const vercelPreviewRegex = /^https:\/\/fintech-assignment.*\.vercel\.app$/;
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true);
+      const normalized = origin.replace(/\/+$/, "");
+      if (allowedOrigins.includes(normalized)) return cb(null, true);
+      if (allowVercelPreviews && vercelPreviewRegex.test(normalized)) return cb(null, true);
+      return cb(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   })
 );
