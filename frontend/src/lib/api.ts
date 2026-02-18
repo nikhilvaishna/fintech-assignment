@@ -1,4 +1,19 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+// Ensure API_BASE is always a full URL
+function getApiBase(): string {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!envUrl) return "http://localhost:3001";
+  
+  // If it starts with http:// or https://, use it as-is
+  if (envUrl.startsWith("http://") || envUrl.startsWith("https://")) {
+    return envUrl.replace(/\/+$/, ""); // Remove trailing slashes
+  }
+  
+  // If it doesn't have a protocol, assume https:// in production
+  const protocol = typeof window !== "undefined" && window.location.protocol === "https:" ? "https://" : "http://";
+  return `${protocol}${envUrl.replace(/^\/+/, "").replace(/\/+$/, "")}`;
+}
+
+const API_BASE = getApiBase();
 
 export type User = { id: string; email: string; name: string | null };
 
