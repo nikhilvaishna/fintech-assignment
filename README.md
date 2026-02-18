@@ -56,3 +56,11 @@ App runs at **http://localhost:3000**. Open it and sign up to create tasks.
 
 - **Backend**: Node.js, Express, TypeScript, Prisma, SQLite, JWT, bcrypt, express-validator
 - **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS, react-hot-toast
+
+## Deployment
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for step-by-step deployment instructions.
+
+**Quick deploy:**
+- **Frontend**: Deploy to [Vercel](https://vercel.com) (free, auto-detects Next.js)
+- **Backend**: Deploy to [Railway](https://railway.app) or [Render](https://render.com) (free tiers available)
